@@ -103,6 +103,14 @@ const changeUserStatus = handleAsyncRequest(async (req, res) => {
   });
 });
 
+const deleteUser = handleAsyncRequest(async (req: any, res) => {
+  const result = await AuthServices.deleteUser(req.user.id);
+  successResponse(res, {
+    message: "User account deleted successfully!",
+    data: result,
+  });
+});
+
 const AuthController = {
   loginUser,
   sendOtp,
@@ -111,7 +119,8 @@ const AuthController = {
   changePassword,
   getNewAccessToken,
   logOut,
-  changeUserStatus
+  changeUserStatus,
+  deleteUser
 };
 
 export default AuthController;

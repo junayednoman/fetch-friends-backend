@@ -53,6 +53,6 @@ authRoutes.patch(
   authVerify([userRoles.admin]),
   AuthController.changeUserStatus
 )
-
+authRoutes.delete("/", authVerify([userRoles.petOwner, userRoles.careBuddy, userRoles.businessPartner]), AuthController.deleteUser)
 
 export default authRoutes;

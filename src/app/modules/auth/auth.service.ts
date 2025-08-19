@@ -9,6 +9,7 @@ import { sendEmail } from "../../utils/sendEmail";
 import isUserExist from "../../utils/isUserExist";
 import fs from "fs";
 import path from "path";
+import mongoose from "mongoose";
 
 const loginUser = async (payload: { email: string; password: string, isRemember: boolean }) => {
   const folderPath = 'uploads';
@@ -241,6 +242,24 @@ const changeUserStatus = async (id: string) => {
   return await Auth.findByIdAndUpdate(user._id, { isBlocked: user.isBlocked ? false : true }, { new: true });
 };
 
+const deleteUser = async (id: string) => {
+  //=====================  DELETE ALL THE RELATED DATA  ========================== \\
+  throw new AppError(400, "check if any asset is assigned to this user");
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    await Auth.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+
+    await session.commitTransaction();
+  } catch (error: any) {
+    await session.abortTransaction();
+    throw new AppError(500, error.message || "Something went wrong");
+  } finally {
+    await session.endSession();
+  }
+}
+
 const AuthServices = {
   loginUser,
   sendOtp,
@@ -249,6 +268,7 @@ const AuthServices = {
   changePassword,
   getNewAccessToken,
   changeUserStatus,
+  deleteUser
 };
 
 export default AuthServices;
