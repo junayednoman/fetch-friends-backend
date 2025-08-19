@@ -21,6 +21,7 @@ export default [
       "no-undef": "error",
       "prettier/prettier": 0,
       "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/ban-ts-comment": "warn",
     },
   },
   {

@@ -3,7 +3,7 @@ import app from "./app";
 import config from "./app/config";
 import { Server as HttpServer } from "http";
 import createAdmin from "./app/utils/createAdmin";
-import initializeSocket from "./app/socket";
+// import initializeSocket from "./app/socket";
 
 let server: HttpServer;
 const socketServer = new HttpServer();
@@ -12,14 +12,14 @@ async function main() {
   try {
     await mongoose.connect(config.database_url as string);
     server = app.listen(Number(config.port), config.ip as string, () => {
-      console.log(`🐿️  Alyse server is running on port: ${config.port}`);
+      console.log(`🐶 Fetch Friends server is running on port: ${config.port}`);
     });
 
     // socket server
-    initializeSocket(socketServer);
-    socketServer.listen(Number(config.socket_port), () => {
-      console.log('🔌 Socket server is running on port:', config.socket_port);
-    });
+    // initializeSocket(socketServer);
+    // socketServer.listen(Number(config.socket_port), () => {
+    //   console.log('🔌 Socket server is running on port:', config.socket_port);
+    // });
 
   } catch (error) {
     console.log("server error:", error);

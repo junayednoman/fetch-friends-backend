@@ -13,6 +13,7 @@ export type TAuth = {
   otpAttempts: number;
   isOtpVerified: boolean;
   needsPasswordChange: boolean;
+  referralCode?: string;
   isDeleted: boolean;
   isBlocked: boolean;
 };
