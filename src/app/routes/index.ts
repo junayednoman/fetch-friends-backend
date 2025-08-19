@@ -6,6 +6,7 @@ import notificationRoutes from "../modules/notification/notification.routes";
 import { uploadFileRoutes } from "../modules/uploadFile/uploadFile.routes";
 import categoryRoutes from "../modules/category/category.routes";
 import { petOwnerRoutes } from "../modules/petOwner/petOwner.routes";
+import { businessPartnerRoutes } from "../modules/businessPartner/businessPartner.routes";
 
 const router = Router();
 
@@ -13,6 +14,13 @@ const apiRoutes = [
   { path: "/auth", route: authRoutes },
   { path: "/admins", route: adminRoutes },
   { path: "/pet-owners", route: petOwnerRoutes },
+  { path: "/business-partners", route: businessPartnerRoutes },
+
+
+
+
+
+
   { path: "/categories", route: categoryRoutes },
   { path: "/legal", route: legalRoutes },
   { path: "/notifications", route: notificationRoutes },
