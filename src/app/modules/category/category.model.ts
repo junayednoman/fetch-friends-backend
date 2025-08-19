@@ -1,15 +1,15 @@
 import mongoose, { Schema } from "mongoose";
 import { TCategory } from "./category.interface";
 
-const CategorySchema = new Schema<TCategory>(
+const categorySchema = new Schema<TCategory>(
   {
-    name: { type: String, required: true },
+    image: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
   },
   {
     timestamps: true,
   }
 );
 
-export const Category = mongoose.model<TCategory>("Category", CategorySchema);
-
+const Category = mongoose.model<TCategory>("Category", categorySchema);
 export default Category;

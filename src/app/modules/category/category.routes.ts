@@ -1,36 +1,40 @@
 import { Router } from "express";
-import { userRoles } from "../../constants/global.constant";
 import authVerify from "../../middlewares/authVerify";
+import categoryControllers from "./category.controller";
+import { upload } from "../../utils/multerS3Uploader";
 import { handleZodValidation } from "../../middlewares/handleZodValidation";
-import { CategoryValidationSchema } from "./category.validation";
-import categoryController from "./category.controller";
+import { categoryCreateValidationSchema, updateCategoryValidationSchema } from "./category.validation";
+import { userRoles } from "../../constants/global.constant";
+const categoryRoutes = Router();
 
-const router = Router();
-
-router.post(
+categoryRoutes.post(
   "/",
   authVerify([userRoles.admin]),
-  handleZodValidation(CategoryValidationSchema),
-  categoryController.createCategory
+  upload.single("image"),
+  handleZodValidation(categoryCreateValidationSchema, true),
+  categoryControllers.createCategory
 );
 
-router.get(
-  "/",
-  authVerify([userRoles.admin, userRoles.teacher]),
-  categoryController.getAllCategories
+categoryRoutes.get("/", categoryControllers.getAllCategories);
+
+categoryRoutes.get(
+  "/:id",
+  authVerify([userRoles.admin, userRoles.careBuddy, userRoles.businessPartner, userRoles.careBuddy]),
+  categoryControllers.getSingleCategory
 );
 
-router.put(
+categoryRoutes.put(
   "/:id",
   authVerify([userRoles.admin]),
-  handleZodValidation(CategoryValidationSchema),
-  categoryController.updateCategory
+  upload.single("image"),
+  handleZodValidation(updateCategoryValidationSchema, true),
+  categoryControllers.updateCategory
 );
 
-router.delete(
+categoryRoutes.delete(
   "/:id",
   authVerify([userRoles.admin]),
-  categoryController.deleteCategory
+  categoryControllers.deleteCategory
 );
 
-export default router;
+export default categoryRoutes;

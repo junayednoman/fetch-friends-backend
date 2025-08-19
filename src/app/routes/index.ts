@@ -4,9 +4,9 @@ import adminRoutes from "../modules/admin/admin.routes";
 import { legalRoutes } from "../modules/legal/legal.routes";
 import notificationRoutes from "../modules/notification/notification.routes";
 import { uploadFileRoutes } from "../modules/uploadFile/uploadFile.routes";
-import categoryRoutes from "../modules/category/category.routes";
 import { petOwnerRoutes } from "../modules/petOwner/petOwner.routes";
 import { businessPartnerRoutes } from "../modules/businessPartner/businessPartner.routes";
+import categoryRoutes from "../modules/category/category.routes";
 
 const router = Router();
 

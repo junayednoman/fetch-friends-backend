@@ -5,17 +5,17 @@ import { userRoles } from "../../constants/global.constant";
 
 const notificationRoutes = Router();
 
-notificationRoutes.post("/", authVerify([userRoles.admin, userRoles.companyAdmin, userRoles.employee]), notificationController.createNotification)
-notificationRoutes.get("/", authVerify([userRoles.admin, userRoles.companyAdmin, userRoles.employee]), notificationController.getAllNotifications)
+notificationRoutes.post("/", authVerify([userRoles.admin, userRoles.petOwner, userRoles.careBuddy, userRoles.businessPartner]), notificationController.createNotification)
+notificationRoutes.get("/", authVerify([userRoles.admin, userRoles.petOwner, userRoles.careBuddy, userRoles.businessPartner]), notificationController.getAllNotifications)
 
 notificationRoutes.patch(
-  "/mark-all-as-read", authVerify([userRoles.admin, userRoles.companyAdmin, userRoles.employee]),
+  "/mark-all-as-read", authVerify([userRoles.admin, userRoles.petOwner, userRoles.careBuddy, userRoles.businessPartner]),
   notificationController.markAllAsRead)
 
-notificationRoutes.get("/unread-count", authVerify([userRoles.admin, userRoles.companyAdmin, userRoles.employee]), notificationController.getUnreadNotificationCount)
+notificationRoutes.get("/unread-count", authVerify([userRoles.admin, userRoles.petOwner, userRoles.careBuddy, userRoles.businessPartner]), notificationController.getUnreadNotificationCount)
 
-notificationRoutes.delete("/:id", authVerify([userRoles.admin, userRoles.companyAdmin, userRoles.employee]), notificationController.deleteSingleNotification)
+notificationRoutes.delete("/:id", authVerify([userRoles.admin, userRoles.petOwner, userRoles.careBuddy, userRoles.businessPartner]), notificationController.deleteSingleNotification)
 
-notificationRoutes.delete("/", authVerify([userRoles.admin, userRoles.companyAdmin, userRoles.employee]), notificationController.deleteMyNotifications)
+notificationRoutes.delete("/", authVerify([userRoles.admin, userRoles.petOwner, userRoles.careBuddy, userRoles.businessPartner]), notificationController.deleteMyNotifications)
 
 export default notificationRoutes;

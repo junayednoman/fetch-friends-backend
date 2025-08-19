@@ -1,57 +1,81 @@
-import Category from "./category.model";
 import { AppError } from "../../classes/appError";
+import { deleteFileFromS3 } from "../../utils/deleteFileFromS3";
+import deleteLocalFile from "../../utils/deleteLocalFile";
+import { uploadToS3 } from "../../utils/multerS3Uploader";
 import { TCategory } from "./category.interface";
-import QueryBuilder from "../../classes/queryBuilder";
+import Category from "./category.model";
 
-const createCategory = async (payload: TCategory) => {
-  const existing = await Category.findOne({ name: payload.name });
-  if (existing) throw new AppError(400, "Category already exists!");
-
-  const category = await Category.create(payload);
-  return category;
+const createCategory = async (payload: TCategory, file: any) => {
+  const category = await Category.findOne({ name: payload.name });
+  if (category) {
+    await deleteLocalFile(file.filename);
+    throw new AppError(400, "Category already exists");
+  }
+  const image = await uploadToS3(file);
+  payload.image = image;
+  const result = await Category.create(payload);
+  return result;
 };
 
-const getAllCategories = async (query: Record<string, any>) => {
-  const searchableFields = ["name"];
-
-  const categoryQuery = new QueryBuilder(Category.find(), query)
-    .search(searchableFields)
-    .filter()
-    .sort()
-    .paginate()
-    .selectFields();
-
-  const meta = await categoryQuery.countTotal();
-  const result = await categoryQuery.queryModel;
-  return { data: result, meta };
+const getAllCategories = async (searchText: string) => {
+  const result = await Category.find({
+    $or: [
+      { name: { $regex: searchText, $options: "i" } },
+    ]
+  });
+  return result;
 };
 
-const updateCategory = async (id: string, payload: Partial<TCategory>) => {
-  const category = await Category.findById(id);
+const getSingleCategory = async (_id: string) => {
+  const result = await Category.findById(_id);
+  return result;
+};
+
+const updateCategory = async (
+  _id: string,
+  payload: TCategory,
+  file?: any
+) => {
+  const category = await Category.findById(_id);
   if (!category) {
-    throw new AppError(400, "Invalid category ID!");
+    await deleteLocalFile(file.filename);
+    throw new AppError(404, "Category not found");
   }
 
-  const existingWithName = await Category.findOne({ name: payload.name });
-  if (existingWithName) throw new AppError(400, "Category already exists!");
+  if (file) {
+    const image = await uploadToS3(file);
+    payload.image = image;
+  }
 
-  const updated = await Category.findByIdAndUpdate(id, payload, { new: true });
-  return updated;
+  const result = await Category.findOneAndUpdate({ _id }, payload, {
+    new: true,
+  });
+
+  // delete old image from s3 bucket
+  if (result && file) {
+    await deleteFileFromS3(category.image);
+  }
+  return result;
 };
 
 const deleteCategory = async (id: string) => {
-  const existing = await Category.findById(id);
-  if (!existing) {
-    throw new AppError(400, "Invalid category ID!");
+  const category = await Category.findById(id);
+  if (!category) throw new AppError(404, "Category not found");
+
+  const result = await Category.findByIdAndDelete(id);
+
+  if (result) {
+    await deleteFileFromS3(category.image);
   }
-  throw new AppError(400, "check if any asset is assigned to this category");
-  const deleted = await Category.findByIdAndDelete(id);
-  return deleted;
+
+  return result;
 };
 
-export default {
+const categoryServices = {
   createCategory,
   getAllCategories,
+  getSingleCategory,
   updateCategory,
   deleteCategory,
 };
+export default categoryServices;

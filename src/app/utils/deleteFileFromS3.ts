@@ -22,7 +22,7 @@ const s3 = new S3Client({
 export const deleteFileFromS3 = async (
   fileLocation: string
 ): Promise<void> => {
-  const fileKey = fileLocation.split(".amazonaws.com/")[1];
+  const fileKey = decodeURIComponent(fileLocation.split(".amazonaws.com/")[1]);
   try {
     const params = {
       Bucket: config.aws_s3_bucket_name as string, // Your bucket name
@@ -32,7 +32,7 @@ export const deleteFileFromS3 = async (
     const command = new DeleteObjectCommand(params);
     await s3.send(command);
   } catch (error: any) {
-    console.error(`Error deleting file: ${error.message}`);
+    console.log(`Error deleting file: ${error.message}`);
   }
 };
 

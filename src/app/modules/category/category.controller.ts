@@ -1,39 +1,62 @@
 import handleAsyncRequest from "../../utils/handleAsyncRequest";
 import { successResponse } from "../../utils/successResponse";
-import categoryService from "./category.service";
+import categoryServices from "./category.service";
 
-const createCategory = handleAsyncRequest(async (req: any, res) => {
+const createCategory = handleAsyncRequest(async (req, res) => {
+  const data = JSON.parse(req?.body?.payload || '{}');
+  const result = await categoryServices.createCategory(data, req.file);
   successResponse(res, {
     message: "Category created successfully!",
-    data: await categoryService.createCategory(req.body),
+    data: result,
     status: 201,
   });
 });
 
-const getAllCategories = handleAsyncRequest(async (req: any, res) => {
+const getAllCategories = handleAsyncRequest(async (req, res) => {
+  const searchTerm = req.query.searchTerm || "";
+  const result = await categoryServices.getAllCategories(searchTerm as string);
   successResponse(res, {
     message: "Categories retrieved successfully!",
-    data: await categoryService.getAllCategories(req.query),
+    data: result,
   });
 });
 
-const updateCategory = handleAsyncRequest(async (req: any, res) => {
+const getSingleCategory = handleAsyncRequest(async (req, res) => {
+  const id = req.params.id;
+  const result = await categoryServices.getSingleCategory(id);
+  successResponse(res, {
+    message: "Category retrieved successfully!",
+    data: result,
+  });
+});
+
+const updateCategory = handleAsyncRequest(async (req, res) => {
+  const id = req.params.id;
+  const payload = JSON.parse(req?.body?.payload || '{}');
+
+  const result = await categoryServices.updateCategory(id, payload, req.file);
   successResponse(res, {
     message: "Category updated successfully!",
-    data: await categoryService.updateCategory(req.params.id, req.body),
+    data: result,
   });
 });
 
-const deleteCategory = handleAsyncRequest(async (req: any, res) => {
+const deleteCategory = handleAsyncRequest(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await categoryServices.deleteCategory(id);
   successResponse(res, {
     message: "Category deleted successfully!",
-    data: await categoryService.deleteCategory(req.params.id),
+    data: result,
   });
 });
 
-export default {
+const categoryControllers = {
   createCategory,
   getAllCategories,
+  getSingleCategory,
   updateCategory,
   deleteCategory,
 };
+
+export default categoryControllers;
