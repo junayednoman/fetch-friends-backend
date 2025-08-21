@@ -11,6 +11,7 @@ import storyRoutes from "../modules/story/story.routes";
 import postRoutes from "../modules/post/post.routes";
 import { commentRoutes } from "../modules/comment/comment.routes";
 import { reportRoutes } from "../modules/reports/reports.routes";
+import reelsRoutes from "../modules/reels/reels.routes";
 
 const router = Router();
 
@@ -24,6 +25,7 @@ const apiRoutes = [
   { path: "/posts", route: postRoutes },
   { path: "/comments", route: commentRoutes },
   { path: "/reports", route: reportRoutes },
+  { path: "/reels", route: reelsRoutes },
 
 
 

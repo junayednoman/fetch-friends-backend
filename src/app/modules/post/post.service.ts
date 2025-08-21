@@ -71,7 +71,10 @@ const getAllPosts = async (query: Record<string, any>, userId: string) => {
 
   const meta = await postQuery.countTotal();
   const result = await postQuery.execute().then((docs) =>
-    Post.populate(docs, { path: "author", select: "name image location" })
+    Post.populate(docs, {
+      path: "author", select: "user role",
+      populate: { path: "user", select: "name image location" }
+    })
   );
 
   return { data: result, meta };
