@@ -3,17 +3,7 @@ import AWS from 'aws-sdk';
 import config from "../config";
 import path from "path";
 import fs from "fs";
-
-export interface TFile {
-  fieldname: string
-  originalname: string
-  encoding: string
-  mimetype: string
-  destination: string
-  filename: string
-  path: string
-  size: number
-}
+import { TFile } from "../../interface/file.interface";
 
 export const upload = multer({
   dest: 'uploads/',

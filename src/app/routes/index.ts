@@ -7,6 +7,9 @@ import { uploadFileRoutes } from "../modules/uploadFile/uploadFile.routes";
 import { petOwnerRoutes } from "../modules/petOwner/petOwner.routes";
 import { businessPartnerRoutes } from "../modules/businessPartner/businessPartner.routes";
 import categoryRoutes from "../modules/category/category.routes";
+import storyRoutes from "../modules/story/story.routes";
+import postRoutes from "../modules/post/post.routes";
+import { commentRoutes } from "../modules/comment/comment.routes";
 
 const router = Router();
 
@@ -15,13 +18,15 @@ const apiRoutes = [
   { path: "/admins", route: adminRoutes },
   { path: "/pet-owners", route: petOwnerRoutes },
   { path: "/business-partners", route: businessPartnerRoutes },
-
-
-
-
-
-
   { path: "/categories", route: categoryRoutes },
+  { path: "/stories", route: storyRoutes },
+  { path: "/posts", route: postRoutes },
+  { path: "/comments", route: commentRoutes },
+
+
+
+
+
   { path: "/legal", route: legalRoutes },
   { path: "/notifications", route: notificationRoutes },
   { path: "/upload-files", route: uploadFileRoutes },

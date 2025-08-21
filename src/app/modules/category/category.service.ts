@@ -2,6 +2,7 @@ import { AppError } from "../../classes/appError";
 import { deleteFileFromS3 } from "../../utils/deleteFileFromS3";
 import deleteLocalFile from "../../utils/deleteLocalFile";
 import { uploadToS3 } from "../../utils/multerS3Uploader";
+import { PetOwner } from "../petOwner/petOwner.model";
 import { TCategory } from "./category.interface";
 import Category from "./category.model";
 
@@ -61,6 +62,12 @@ const updateCategory = async (
 const deleteCategory = async (id: string) => {
   const category = await Category.findById(id);
   if (!category) throw new AppError(404, "Category not found");
+
+  const posts = await Category.findOne({ category: id });
+  if (posts) throw new AppError(400, "Category has posts");
+
+  const owner = await PetOwner.findOne({ category: id });
+  if (owner) throw new AppError(400, "Category has pet owners");
 
   const result = await Category.findByIdAndDelete(id);
 
