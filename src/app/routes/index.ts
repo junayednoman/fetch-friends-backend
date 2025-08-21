@@ -10,6 +10,7 @@ import categoryRoutes from "../modules/category/category.routes";
 import storyRoutes from "../modules/story/story.routes";
 import postRoutes from "../modules/post/post.routes";
 import { commentRoutes } from "../modules/comment/comment.routes";
+import { reportRoutes } from "../modules/reports/reports.routes";
 
 const router = Router();
 
@@ -22,7 +23,7 @@ const apiRoutes = [
   { path: "/stories", route: storyRoutes },
   { path: "/posts", route: postRoutes },
   { path: "/comments", route: commentRoutes },
-
+  { path: "/reports", route: reportRoutes },
 
 
 
